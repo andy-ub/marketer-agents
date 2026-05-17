@@ -78,11 +78,31 @@ Persona file paths to dispatch (in panel order):
 - **Retry malformed:** if retry also malformed → mark that persona `malformed`.
 - **All-4-failed:** if all 4 personas timeout or malformed → emit `Panel: all personas failed to respond. Re-run when infrastructure stable.` and exit non-zero (in-session: stop and surface to user).
 
+### Raw-output preservation (audit-trail requirement)
+
+After each Agent call returns (including retries; including timeouts and malformed responses), write the **verbatim** subagent response to:
+
+```
+eval-runs/raw/<YYYY-MM-DD>-<input-id>-<persona-id>-run<N>.md
+```
+
+Where:
+- `<YYYY-MM-DD>` is the run date.
+- `<input-id>` derives from invocation: `pr<NUMBER>` for PR-ref form (e.g., `pr006`), or the short commit-SHA for local-commit form, or `local-diff-<HHMM>` for pasted form.
+- `<persona-id>` is one of `brand-voice`, `funnel-stage`, `hypothesis-driven`, `data-trust`.
+- `<N>` is the run-within-this-dispatch-session counter (1 if this is a single-run dispatch; 1/2 for a consistency-check pair).
+
+The raw file contains: the verbatim response text, prepended with a 3-line YAML header (`persona`, `run-date`, `dispatch-status: ok | timeout | malformed`). No analysis, no classification — just the artifact. If a persona timed out or returned malformed text, save the (possibly empty) response alongside the status; preserve failure artifacts identically.
+
+This preserves the source artifact so independent reviewers can audit reasoning-quality claims against verbatim subagent text, not against the builder's classification of that text. Without raw preservation, every Reasoning-quality claim in a summary archive is unfalsifiable except by re-dispatch (which is non-deterministic).
+
 ### Output of Step 2
 
 In-session variables:
 - `persona_outputs` — dict: `{persona_id: response_text | "timeout" | "malformed"}`
 - `failed_personas` — list of persona_ids that did not produce output
+
+On-disk artifacts (4-8 files per dispatch session, depending on run-count + retries): `eval-runs/raw/<...>.md` per the schema above.
 
 ---
 
@@ -385,6 +405,19 @@ For audit transparency: elements personas evaluated in-lane but chose NOT to fla
 ### Optional archive
 
 If `archive` flag is set or user requests: write the rendered output to `eval-runs/<YYYY-MM-DD>-orchestrator-<pr-ref or local>.md` alongside this in-session display.
+
+The archive MUST include a `## Raw subagent outputs` section near the top, linking to every raw file written in Step 2's preservation phase:
+
+```markdown
+## Raw subagent outputs
+
+- [brand-voice run 1](raw/2026-05-17-pr006-brand-voice-run1.md)
+- [brand-voice run 2](raw/2026-05-17-pr006-brand-voice-run2.md)
+- [funnel-stage run 1](raw/2026-05-17-pr006-funnel-stage-run1.md)
+- ...
+```
+
+This is a hard requirement, not optional. The archive is the builder's classification of the artifacts; the raw files are the artifacts. Both must be discoverable in the same place for independent review to be meaningful.
 
 ---
 

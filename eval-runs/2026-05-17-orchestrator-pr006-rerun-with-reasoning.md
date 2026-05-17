@@ -19,7 +19,7 @@ Same input as the original PR #6 dry-run. Same context-supplement block. Persona
 | Persona | Findings | Severities | Reasoning quality | Considered-but-not-flagged | Notable |
 |---|---|---|---|---|---|
 | Brand-Voice v0.5 | 3 | Block × 3 | Genuine × 3 (cites signal, alternative considered, severity boundary) | 4 items (Pageviews, AvgTimeOnPage, Period arg, PageUrl) | F1 explicitly considers Stone-class alternative; F2 cites description-only-prose-leak subcase from rubric; F3 distinguishes from F2 (not double-counting) |
-| Funnel-Stage v0.3 | 2 | Block, Concern | Genuine × 2 (clean source-of-truth check; severity-boundary explicit) | 4 items (AvgTimeOnPage polarity ambiguity, Pageviews uniform, Period/Limit, TopPagesMetric enum folded into F1) | **Explicitly rejected AvgTimeOnPage Q2 polarity** in Considered-but-not-flagged — same dimension persona had flagged as Concern in original dry-run Run 1. v0.3 surfaces this self-correction visibly |
+| Funnel-Stage v0.3 | 2 | Block, Concern | Genuine × 2 (clean source-of-truth check; severity-boundary explicit) | 4 items (AvgTimeOnPage polarity ambiguity, Pageviews uniform, Period/Limit, TopPagesMetric enum folded into F1) | **Explicitly rejected AvgTimeOnPage Q2 polarity** in Considered-but-not-flagged — same dimension persona had flagged as Concern in original dry-run Run 1. v0.3 surfaces this self-deliberation visibly (note: Run 2 re-framed AvgTimeOnPage via Q6 engagement wrapper — same persona, contradictory takes across runs; transparency surfaces this disagreement, does not resolve it) |
 | Hypothesis-Driven v0.3 | 0 (sentinel) | — | N/A | 4 items (4 trigger phrases evaluated and rejected with specific reasons) | Sentinel + considered-but-not-flagged shape — useful for audit despite spec saying "nothing else" after sentinel |
 | Data-Trust v0.3 | 2 | Block × 2 | Genuine × 2 (alternative rejection cites lane boundary; severity boundary cites wrong-diagnosis test) | 5 items (AvgTimeOnPage forward-looking Q5, Limit out of lane, Pageviews not at risk, Metric arg out of lane, timezone correctness routing) | F2 timezone = **Block** in Run 1 (was Concern in original dry-run Run 1, Block in original dry-run Run 2 — now stable Block in transparency runs) |
 
@@ -111,7 +111,7 @@ Plus Considered-but-not-flagged section: ~100-180 words per persona output (5-8 
 - **Two-run consistency on Reasoning:** Low-to-moderate drift; reasoning tracks finding shape (good signal).
 - **Output bloat:** ~40-50% per persona response. Acceptable trade-off for transparency.
 - **Notable wins:**
-  - Funnel-Stage Run 1 explicitly rejected AvgTimeOnPage polarity in Considered-but-not-flagged — visible self-correction.
+  - Funnel-Stage Run 1 explicitly rejected AvgTimeOnPage polarity in Considered-but-not-flagged (visible self-deliberation). **Caveat per Session 3 reframe**: Run 2 re-framed AvgTimeOnPage via Q6 engagement wrapper — persona produced inconsistent takes across runs. Transparency surfaces this; v0.3 design doesn't resolve it. Whether visible inconsistency is feature or drag is an open question for Story 25 sample. Earlier framing of this as "visible self-correction" was over-claiming — what actually happened is visible self-disagreement.
   - Hypothesis-Driven sentinel + considered section provides audit trail even when no findings fire.
   - All Considered-but-not-flagged items cite specific elements with specific reasons.
 
