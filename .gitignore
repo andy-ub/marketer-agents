@@ -1,0 +1,12 @@
+# Claude Code transient files
+.claude/
+.playwright-mcp/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+
+# Logs
+*.log
