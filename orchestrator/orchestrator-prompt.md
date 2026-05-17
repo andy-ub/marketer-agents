@@ -113,10 +113,27 @@ If not sentinel: parse with the finding-template regex (`orchestrator/regex-patt
   evidence_tokens: <list of identifier tokens, lowercased, ≥3 chars, stopwords removed>,
   evidence_file: <extracted file path, if present>,
   framework_citation: <raw string>,
+  reasoning: <raw markdown body>,
   issue: <raw markdown body>,
   recommendation: <raw markdown body>,
 }
 ```
+
+### 3b-bis. Extract Considered-but-not-flagged section (persona-level, optional)
+
+After all findings in a persona's response, scan for an optional `## Considered but not flagged` heading. If present, parse the subsequent bullet list — each bullet has format `` - `<element>` — <reason> ``. Record per-persona:
+
+```
+{
+  persona_id: <persona_id>,
+  considered_but_not_flagged: [
+    {element: <raw>, reason: <raw>},
+    ...
+  ]
+}
+```
+
+If absent, the persona simply has no `considered_but_not_flagged` entry. Empty header with no bullets → malformed (retry).
 
 ### 3c. Extract Context-gap lines
 
@@ -133,7 +150,8 @@ After the last `### Finding N:` block (or instead of one, if a persona emitted s
 
 ### Output of Step 3
 
-- `findings` — flat list of all findings across all personas
+- `findings` — flat list of all findings across all personas (each finding has `reasoning` field)
+- `considered_but_not_flagged` — dict: `{persona_id: [{element, reason}, ...]}` for personas that emitted the section
 - `context_gaps` — flat list of all gap escalations
 
 ---
@@ -316,6 +334,7 @@ Emit the panel review using this exact structure (Risk 1c). Replace placeholders
 - **Origin:** <implementer-authored | ai-reviewer-suggested | human-reviewer-suggested | unknown[ — <reason>]>
 - **Evidence:** <verbatim from persona>
 - **Framework citation:** <verbatim from persona>
+- **Reasoning:** <verbatim from persona>
 - **Issue:** <verbatim from persona>
 - **Recommendation:** <verbatim from persona>
   <if related-concerns folded in:>
@@ -323,6 +342,21 @@ Emit the panel review using this exact structure (Risk 1c). Replace placeholders
   <end if>
 
 <end for>
+
+## Persona deliberation — Considered but not flagged
+
+For audit transparency: elements personas evaluated in-lane but chose NOT to flag.
+
+<for each persona that emitted a section:>
+
+### <persona-id>
+
+- `<element>` — <reason>
+- ...
+
+<end for>
+
+(if no persona emitted this section, omit the entire `## Persona deliberation` section)
 
 ## Context-gap routing
 

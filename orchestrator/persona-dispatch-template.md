@@ -26,7 +26,7 @@ After reading, review the following code diff from Engage.AI:
 
 {optional-context-block}
 
-Now produce your panel review of this diff. Apply ONLY your audit dimensions. Follow the output format in your persona file exactly — including the consequence-first Issue structure, the voice instructions, and the no-findings sentinel rule. Do not stretch on dimensions outside your lane.
+Now produce your panel review of this diff. Apply ONLY your audit dimensions. Follow the output format in your persona file exactly — including the consequence-first Issue structure, the voice instructions, the **mandatory Reasoning field per finding**, the optional **Considered but not flagged** persona-level section, and the no-findings sentinel rule. Do not stretch on dimensions outside your lane.
 
 Output only the findings (or the "No findings" sentinel). Nothing else.
 ```

@@ -18,7 +18,7 @@ When matching, use multiline mode (PCRE `m` or Python `re.MULTILINE`) and DOTALL
 A persona finding consists of:
 
 - A markdown H3 header starting with `### Finding ` followed by a number and a title.
-- A bullet list with exactly 5 fields, in this order: Severity / Evidence / Framework citation / Issue / Recommendation.
+- A bullet list with exactly **6 fields**, in this order: Severity / Evidence / Framework citation / **Reasoning** / Issue / Recommendation. (Reasoning added in persona v0.3-onwards for transparency per [`../personas/01-brand-voice-marketer.md`](../personas/01-brand-voice-marketer.md) v0.5 changelog.)
 - Each field's value may span multiple lines until the next bullet or the next finding header.
 
 ### Header pattern
@@ -48,6 +48,11 @@ The lookahead terminates at the next bullet field, the next finding header, a Co
 ^\s*[-*]\s+\*\*Framework citation:\*\*\s+(.+?)(?=^\s*[-*]\s+\*\*[A-Z]|^### Finding|^Context gap|\Z)
 ```
 
+**Reasoning:**
+```
+^\s*[-*]\s+\*\*Reasoning:\*\*\s+(.+?)(?=^\s*[-*]\s+\*\*[A-Z]|^### Finding|^Context gap|\Z)
+```
+
 **Issue:**
 ```
 ^\s*[-*]\s+\*\*Issue:\*\*\s+(.+?)(?=^\s*[-*]\s+\*\*[A-Z]|^### Finding|^Context gap|\Z)
@@ -60,7 +65,19 @@ The lookahead terminates at the next bullet field, the next finding header, a Co
 
 ### Validation rule
 
-A finding is considered well-formed iff all 5 fields are present and the Severity value is exactly `Block`, `Concern`, or `Nit`. Missing any field → treat persona output as malformed (Step 2b retry path).
+A finding is considered well-formed iff **all 6 fields are present** (Severity / Evidence / Framework citation / Reasoning / Issue / Recommendation) and the Severity value is exactly `Block`, `Concern`, or `Nit`. Missing any field → treat persona output as malformed (Step 2b retry path). A finding that contains 5 of the 6 fields but omits Reasoning is malformed; this is the transparency-update enforcement.
+
+### Considered-but-not-flagged section (persona-level, optional)
+
+In addition to findings, personas MAY emit a `## Considered but not flagged` section after all findings, before any Context-gap lines. Pattern:
+
+```
+^##\s+Considered but not flagged\s*$
+(then a list of bullets:)
+^\s*[-*]\s+`<element>`\s+—\s+(.+?)$
+```
+
+The section is optional. Absence is not malformed. Presence requires ≥1 bullet — an empty `## Considered but not flagged` header with no bullets is malformed (persona violated the "do not emit header with no content" rule).
 
 ---
 
@@ -241,7 +258,7 @@ If the response starts with any of these → malformed (skip §1 extraction, go 
 
 ### Partial template
 
-If the response contains `### Finding` headers but at least one finding is missing one of the 5 required fields (Severity / Evidence / Framework citation / Issue / Recommendation) → malformed.
+If the response contains `### Finding` headers but at least one finding is missing one of the 6 required fields (Severity / Evidence / Framework citation / **Reasoning** / Issue / Recommendation) → malformed.
 
 If the response contains neither `### Finding` headers NOR a recognized sentinel → malformed.
 
@@ -255,8 +272,14 @@ For each persona output, walk the structure:
 
 1. Is the response a sentinel? (§2 — check first; cheapest)
 2. Does it contain refusal patterns or empty body? (§6 — bail to malformed)
-3. Iterate finding blocks (§1), extracting one structured record per `### Finding N:` header.
-4. Scan for Context-gap lines (§3) after the last finding (or after sentinel).
-5. For each extracted finding, derive Evidence tokens (§4) for use in Step 4.
+3. Iterate finding blocks (§1), extracting one structured record per `### Finding N:` header. **Reasoning is mandatory per finding** — a finding missing Reasoning is malformed.
+4. After all findings, scan for an optional `## Considered but not flagged` section (§1 sub-spec). Extract the bullet list if present; record per-persona.
+5. Scan for Context-gap lines (§3) after the last finding (or after Considered-but-not-flagged section, or after sentinel).
+6. For each extracted finding, derive Evidence tokens (§4) for use in Step 4 merge logic.
+
+When rendering panel output:
+
+- Preserve **Reasoning verbatim** per finding alongside Evidence, Framework citation, Issue, Recommendation.
+- Surface the **Considered-but-not-flagged section per persona** in a top-level Persona deliberation section of the final panel output (audit trail). If no persona emits this section, omit the Persona deliberation section entirely.
 
 If any extraction is ambiguous (rare — only when persona violates its own output template), prefer marking the persona `malformed` and triggering retry over guessing at the intent. False negatives (missing a real finding) are better than false positives (fabricating structure).
