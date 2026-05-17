@@ -109,9 +109,37 @@ Several persona and orchestrator docs reference `<engage-workspace>/` and `<rese
 
 ## Status
 
-**v0.1 weekend experiment.** Validated against the three PR #5 eval cases (MonetaryValue / IsInverted / IsInvalid) + one synthetic Q7 case. Three smoke-test cycles run against PR #5 pre-fix code; core catches stable across all 6 dispatches.
+**v0.1 weekend experiment.** Validated against PR #5 catches during build (MonetaryValue / IsInverted / IsInvalid + one synthetic Q7 case) — three smoke-test cycles, core catches stable across 6 dispatches.
 
-Real-PR validation (against an actual not-yet-merged PR) pending. See [`HANDOFF.md`](HANDOFF.md) for cold-start invocation and current Phase 2.5 status. `HANDOFF.md` is internal-handoff style; this README is external-onboarding style.
+**First real-PR validation run completed against PR #6 pre-fix code (2026-05-17):** panel replicated **2 of 2 domain-semantic catches** from human review (metric routing + timezone-aware boundaries) with multi-persona agreement on the primary catch. Real-PR validation period continues over Story 25 + 1 more PR. See [Testing strategy](#testing-strategy) below + [`docs/testing-the-panel.md`](docs/testing-the-panel.md) for methodology, and [`HANDOFF.md`](HANDOFF.md) for cold-start invocation (internal-handoff style; this README is external-onboarding style).
+
+---
+
+## Testing strategy
+
+The panel encodes marketer perspectives caught by human reviewers in past PRs. We validate it against new PRs the same way: pick a known-bug code state, inject schema context, dispatch the panel blind, score against ground truth.
+
+**Methodology (4-step flow):**
+
+1. **Pick a pre-fix commit** of a PR with documented review catches. Fetch via `git show <ref>:<file>`. Panel must be blind to PR review outcome.
+2. **Inject context-supplement block** (schema references, interface declarations, prior-story decisions). Discipline: provide facts, NOT hints about suspected bugs.
+3. **Dispatch panel** (4 personas in parallel via Agent tool). Run twice for consistency check.
+4. **Score findings** against ground truth (fix commits + PR review history). Match rubric: full / partial / different element / missed.
+
+Aggregate over 3 PRs for confidence. Escalation triggers documented in [`docs/development-workflow.md`](docs/development-workflow.md) §"Empirical validation + escalation criteria".
+
+**Validation state (1 of 3 PRs measured):**
+
+- PR #6 (`engage_get_top_pages`) dry-run, 2026-05-17: panel replicated **2 of 2 domain-semantic catches** (metric routing + timezone-aware boundaries). Multi-persona agreement on metric routing (3 personas converged). One borderline false positive (~6% FP rate). Full archive at [`eval-runs/2026-05-17-orchestrator-pr006-pre-fix-dry-run.md`](eval-runs/2026-05-17-orchestrator-pr006-pre-fix-dry-run.md).
+- Story 25 (next): run #2 of 3 will land when the PR ships.
+
+**Honest limitations:**
+
+- The PR #6 context block contained explicit schema mappings that hinted at the metric-routing bug; panel deserves partial credit (multi-persona framing, structured findings) not full discovery credit. The timezone catch was less context-leaked — panel connected `ReportingTimeZone` existence to UTC usage independently.
+- 3 PRs is minimum viable signal. Real validation needs 10+ PRs over multiple sprints to baseline drift, false positive distribution, and persona-lane coverage.
+- Panel catches Q1-Q7 domain-semantic dimensions. Bugs outside (pure engineering correctness, performance, security) won't be caught. Complementary to other review layers, not replacement.
+
+See [`docs/testing-the-panel.md`](docs/testing-the-panel.md) for full methodology details + context-engineering discipline + match scoring rubric.
 
 ---
 
