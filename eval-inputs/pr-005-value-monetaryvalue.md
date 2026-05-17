@@ -5,7 +5,6 @@ case-type: failure-prevention
 audit-question: Q3 — Generic vs imposed semantic (Stone vs Opinion)
 source-pr: umbraco/umbraco.engage.ai PR #5 (Story 03 — engage_get_goals)
 source-fix: commit d483e05 (reverted MonetaryValue → Value)
-reviewer-context: Corne (PM + lead) inline comment correcting Codex round 1 suggestion
 created: 2026-05-15
 purpose: Mechanical eval input for marketer-review skill / agent panel. Tests the AI-suggested-semantic-imposition failure mode — where an AI reviewer (Codex in this case) renames a generic field to a specific semantic that the data does not guarantee.
 notable: This is the failure mode where AI reviewers (Codex / pr-review-toolkit) actively introduced the bug. Stone-vs-Opinion is the precise OSS discipline that prevents it.
@@ -41,7 +40,7 @@ public record GoalResult(
     bool IsActive);
 ```
 
-The PR #5 review surfaced this rename as a domain error. Corne reverted it back to `Value` in commit d483e05.
+The PR #5 review surfaced this rename as a domain error. Reverted to `Value` in commit d483e05.
 
 ## Why it failed
 
@@ -194,4 +193,4 @@ Marketer-review skill / agent panel should be calibrated to catch this failure c
 - `engage-workspace/notes/engage-design-patterns.md` §2 (Stone vs Opinion shape variants)
 - `pr-005-is-invalid.md` (separate Q1 failure in same PR)
 - `pr-005-is-inverted.md` (separate Q2 failure in same PR)
-- D:/source/work/marketer-agent-research/notes/patterns/domain-audit-equivalents.md (cross-source verification of Stone-vs-Opinion as recurring OSS pattern)
+- &lt;research-workspace&gt;/notes/patterns/domain-audit-equivalents.md (cross-source verification of Stone-vs-Opinion as recurring OSS pattern)

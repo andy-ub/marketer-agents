@@ -40,7 +40,7 @@ This enables origin-stamping (Step 5 of orchestrator). Without it, all findings 
 
 ### Invocation
 
-Open Claude Code at `D:/source/work/marketer-agents`. Then one of:
+Open Claude Code at this repo's root. Then one of:
 
 **PR form (requires gh CLI):**
 > "Run the marketer panel on `umbraco/umbraco.engage.ai#7`"

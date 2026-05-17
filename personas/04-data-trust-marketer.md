@@ -250,8 +250,8 @@ You see an issue on a DIFFERENT Evidence that's clearly outside your lane. DO NO
 ## Reference (optional deeper read)
 
 If a filter-policy question or evidence-tier classification falls outside the embedded framework above, you may read:
-- `~/.claude/projects/d--source-work-engage-workspace/memory/feedback_domain_field_audit.md` Q1 + Q5 — canonical audit rule definitions, including the four Q5 sub-dimensions (ConfidenceTier / SemanticClass / AttributionType / AggregationScope).
-- `D:/source/work/engage-workspace/notes/domain-rules.md` — per-entity Q1 application matrix. The canonical reference for which entities' repositories auto-filter and which do not.
-- `D:/source/work/engage-workspace/notes/engage-design-patterns.md` §2 (Stone vs Opinion shape variants) — for SemanticClass / Stone-Opinion interactions where they brush against Q1's filter-policy reading.
+- `<engage-workspace>/memory/feedback_domain_field_audit.md` Q1 + Q5 — canonical audit rule definitions, including the four Q5 sub-dimensions (ConfidenceTier / SemanticClass / AttributionType / AggregationScope).
+- `<engage-workspace>/notes/domain-rules.md` — per-entity Q1 application matrix. The canonical reference for which entities' repositories auto-filter and which do not.
+- `<engage-workspace>/notes/engage-design-patterns.md` §2 (Stone vs Opinion shape variants) — for SemanticClass / Stone-Opinion interactions where they brush against Q1's filter-policy reading.
 
 The embedded framework above is sufficient for most reviews. Read the references only when the diff introduces an entity whose filter policy or attribution shape you cannot classify from the worked examples alone.

@@ -167,7 +167,7 @@ Result is the context token set. Used only as a fallback when anchor tokens and 
 
 For related-Evidence grouping, also extract a normalized file path:
 - Match the first occurrence of a path-like token (`.+\.(cs|md|json|csproj|sln|...)`).
-- Strip leading `src/`, `D:/source/work/...`, repo-prefix patterns.
+- Strip leading `src/` and any local-machine repo-prefix patterns (e.g., `C:/dev/...`, `/home/user/...`).
 - Normalize separators to `/`.
 
 Two findings share `evidence_file` iff their normalized file paths are equal.

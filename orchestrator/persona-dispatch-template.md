@@ -38,8 +38,8 @@ Output only the findings (or the "No findings" sentinel). Nothing else.
 ### `{persona-file-absolute-path}`
 
 The full absolute path to the persona file being dispatched. Examples:
-- `D:/source/work/marketer-agents/personas/01-brand-voice-marketer.md`
-- `D:/source/work/marketer-agents/personas/04-data-trust-marketer.md`
+- `personas/01-brand-voice-marketer.md`
+- `personas/04-data-trust-marketer.md`
 
 ### `{language-hint}`
 
@@ -92,7 +92,7 @@ For the canonical PR #5 pre-fix dispatch on persona #1 (Brand-Voice Marketer), t
 ```
 You are taking on the role described in this persona file. Read it in full — it is your complete role brief, including framework, audit dimensions, severity rubric, output format, voice instructions, and constraints:
 
-`D:/source/work/marketer-agents/personas/01-brand-voice-marketer.md`
+`personas/01-brand-voice-marketer.md`
 
 After reading, review the following Engage.AI code (the state of `src/Umbraco.Engage.AI/Tools/GetGoalsTool.cs` at commit `d483e05^`, i.e. *before* PR #5 review fixes were applied):
 
@@ -100,7 +100,7 @@ After reading, review the following Engage.AI code (the state of `src/Umbraco.En
 [... pre-fix GetGoalsTool.cs source ...]
 ```
 
-Additional context about the underlying data layer (you can verify this by reading `D:/source/work/umbraco.engage/src/` if needed): `Goal.Value` in Engage Core is a generic `decimal` property on `IGoal`. The Engage UI lets marketers configure it freely — it might represent a monetary amount, a count, a priority score, a weight, or be left at zero for tracking-only goals. The data layer does not enforce any specific semantic on this field.
+Additional context about the underlying data layer (you can verify this by reading the [Umbraco Engage Core source](https://github.com/umbraco/Umbraco.Engage) if needed): `Goal.Value` in Engage Core is a generic `decimal` property on `IGoal`. The Engage UI lets marketers configure it freely — it might represent a monetary amount, a count, a priority score, a weight, or be left at zero for tracking-only goals. The data layer does not enforce any specific semantic on this field.
 
 Now produce your panel review of this diff. Apply ONLY your audit dimensions (Q3 generic-vs-imposed, Q1(c) Stone-vs-Opinion). Follow the output format in your persona file exactly — including the consequence-first Issue structure and the voice instructions. Do not summarize or editorialize outside the finding template. If you find no Q3 or Q1(c) issues, respond with the exact "No findings" sentinel from the persona file.
 

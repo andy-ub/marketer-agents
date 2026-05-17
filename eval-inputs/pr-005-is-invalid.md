@@ -5,7 +5,6 @@ case-type: failure-prevention
 audit-question: Q1 — Repository filter policy
 source-pr: umbraco/umbraco.engage.ai PR #5 (Story 03 — engage_get_goals)
 source-fix: commit d483e05 (added IsInvalid + IsInverted, reverted MonetaryValue → Value)
-reviewer-context: Corne (PM + lead) inline comment
 created: 2026-05-15
 purpose: Mechanical eval input for marketer-review skill / agent panel. Skill should mechanically identify the same failure pattern when given the original (pre-fix) code.
 ---
@@ -51,7 +50,7 @@ Pattern copy-paste without verifying the upstream filter behavior:
 
 - **Story 03 (Goals):** the `Goal` repository does NOT auto-filter. Invalid goals (e.g., goals whose tracked node was deleted) flow through `IGoalService.GetAll()` and reach the AI tool intact. WITHOUT `IsInvalid` on the result record, an LLM cannot tell the marketer the goal is broken.
 
-The Story 03 implementer assumed pattern reuse without verifying the assumption was valid for Goals. Corne flagged this in PR #5 inline review.
+The Story 03 implementer assumed pattern reuse without verifying the assumption was valid for Goals. Flagged during PR #5 inline review.
 
 ## What a marketer should ask (failure scenario without fix)
 

@@ -222,8 +222,8 @@ You see an issue on a DIFFERENT Evidence that's clearly outside your lane. DO NO
 ## Reference (optional deeper read)
 
 If a recommendation-shape question falls outside the embedded framework above, you may read:
-- `~/.claude/projects/d--source-work-engage-workspace/memory/feedback_domain_field_audit.md` Q7 — the canonical audit rule definition with the two acceptable hypothesis-echo formats.
-- `D:/source/work/engage-workspace/notes/engage-design-patterns.md` §1 (Weighted scoring rubric) — for tools that produce ranked recommendations, the rubric shape may interact with hypothesis-echo (per-decision weights or fixed-formula scoring).
-- `D:/source/work/marketer-agent-research/notes/marketer-agent-survey.md` — Q7 has 7/9 OSS source convergence; the survey documents the variations.
+- `<engage-workspace>/memory/feedback_domain_field_audit.md` Q7 — the canonical audit rule definition with the two acceptable hypothesis-echo formats.
+- `<engage-workspace>/notes/engage-design-patterns.md` §1 (Weighted scoring rubric) — for tools that produce ranked recommendations, the rubric shape may interact with hypothesis-echo (per-decision weights or fixed-formula scoring).
+- `<research-workspace>/notes/marketer-agent-survey.md` — Q7 has 7/9 OSS source convergence; the survey documents the variations.
 
 The embedded framework above is sufficient for most reviews. Read the references only when the diff introduces a recommendation pattern you cannot classify from the worked examples alone.

@@ -15,7 +15,7 @@ State files (created on first orchestrator run):
 
 ## How to invoke
 
-In a Claude Code session at `D:/source/work/marketer-agents`, ask Claude:
+In a Claude Code session opened at this repo's root, ask Claude:
 
 > "Run the marketer panel on `umbraco/umbraco.engage.ai#5`."
 

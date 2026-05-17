@@ -5,7 +5,6 @@ case-type: failure-prevention
 audit-question: Q2 — Polarity semantic
 source-pr: umbraco/umbraco.engage.ai PR #5 (Story 03 — engage_get_goals)
 source-fix: commit d483e05
-reviewer-context: Corne (PM + lead) inline comment
 created: 2026-05-15
 purpose: Mechanical eval input for marketer-review skill / agent panel. Tests the polarity-blindness failure mode — LLM interpreting metric direction without entity-level polarity context.
 ---

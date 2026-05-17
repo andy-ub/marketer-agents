@@ -87,9 +87,9 @@ For the canonical Brand-Voice Finding 1 against pr-005-value-monetaryvalue:
   - If Codex left a review comment suggesting `Value → MonetaryValue` *before* commit `97a1ec9`, AND the comment body contains `MonetaryValue` or `Value` — match. **origin = `ai-reviewer-suggested (codex)`**.
 - If the Codex suggestion was inlined in a thread that the orchestrator can fetch via `gh pr view --json comments`, the timestamp check confirms order.
 
-This is the highest-leverage origin class: the panel caught a bug an AI reviewer would have shipped if not for the human PM (Corne) reverting it.
+This is the highest-leverage origin class: the panel catches a bug an AI reviewer would have shipped if not for downstream human review.
 
-For the IsInverted + IsInvalid findings, candidate commits are the same Story 03 initial push (which OMITTED both fields). No prior bot suggestion existed for the omission (the omission was a copy-paste, not a positive suggestion). Therefore: **origin = `implementer-authored`** for both. The reviewer (Corne) flagged them post-hoc; the change to add them is in commit `d483e05`, which is the fix, not the originating commit.
+For the IsInverted + IsInvalid findings, candidate commits are the same Story 03 initial push (which OMITTED both fields). No prior bot suggestion existed for the omission (the omission was a copy-paste, not a positive suggestion). Therefore: **origin = `implementer-authored`** for both. The PR review flagged them post-hoc; the change to add them is in commit `d483e05`, which is the fix, not the originating commit.
 
 ---
 

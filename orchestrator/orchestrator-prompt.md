@@ -66,10 +66,10 @@ Send 4 parallel `Agent` tool calls in a single message. Each call uses:
 
 Persona file paths to dispatch (in panel order):
 
-1. `D:/source/work/marketer-agents/personas/01-brand-voice-marketer.md`
-2. `D:/source/work/marketer-agents/personas/02-funnel-stage-marketer.md`
-3. `D:/source/work/marketer-agents/personas/03-hypothesis-driven-marketer.md`
-4. `D:/source/work/marketer-agents/personas/04-data-trust-marketer.md`
+1. `personas/01-brand-voice-marketer.md`
+2. `personas/02-funnel-stage-marketer.md`
+3. `personas/03-hypothesis-driven-marketer.md`
+4. `personas/04-data-trust-marketer.md`
 
 ### Timeout + retry policy (Risk 2a, 2b)
 

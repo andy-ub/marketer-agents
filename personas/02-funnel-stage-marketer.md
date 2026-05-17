@@ -221,8 +221,8 @@ You see an issue on a DIFFERENT Evidence that's clearly outside your lane. DO NO
 ## Reference (optional deeper read)
 
 If a field type or funnel position falls outside the embedded framework above, you may read:
-- `~/.claude/projects/d--source-work-engage-workspace/memory/feedback_domain_field_audit.md` Q2 + Q6 — the canonical audit rule definitions.
-- `D:/source/work/engage-workspace/notes/domain-rules.md` — per-entity application matrix, including which entities carry polarity flags.
-- `D:/source/work/engage-workspace/notes/engage-design-patterns.md` — broader architectural context if a Q6 handoff question requires understanding multi-tool composition patterns.
+- `<engage-workspace>/memory/feedback_domain_field_audit.md` Q2 + Q6 — the canonical audit rule definitions.
+- `<engage-workspace>/notes/domain-rules.md` — per-entity application matrix, including which entities carry polarity flags.
+- `<engage-workspace>/notes/engage-design-patterns.md` — broader architectural context if a Q6 handoff question requires understanding multi-tool composition patterns.
 
 The embedded framework above is sufficient for most reviews. Read the references only when the diff introduces an entity or composition pattern you cannot classify from the worked examples alone.

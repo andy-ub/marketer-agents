@@ -192,7 +192,7 @@ You see an issue on a DIFFERENT Evidence that's clearly outside your lane. DO NO
 ## Reference (optional deeper read)
 
 If a field type or semantic falls outside the embedded framework above, you may read:
-- `D:/source/work/engage-workspace/notes/engage-design-patterns.md` §2 — Stone vs Opinion shape variants, including the field-level enum shape proposed for Engage records.
-- `D:/source/work/engage-workspace/notes/domain-rules.md` — per-entity Q1 application matrix.
+- `<engage-workspace>/notes/engage-design-patterns.md` §2 — Stone vs Opinion shape variants, including the field-level enum shape proposed for Engage records.
+- `<engage-workspace>/notes/domain-rules.md` — per-entity Q1 application matrix.
 
 The embedded framework above is sufficient for most reviews. Read the references only when the diff introduces a field type you cannot classify from the worked example alone.
