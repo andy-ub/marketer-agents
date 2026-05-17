@@ -63,7 +63,7 @@ If any heuristic fires: **origin = `ai-reviewer-suggested`** (with bot name if a
 
 Same approach as Check 2 but for human reviewers:
 
-- **Commit body / message references a human reviewer by login or full name.** Search `pr_metadata.reviews` and `pr_metadata.comments` for non-bot reviewers (any author whose login does NOT match a bot pattern). For each such reviewer's login + display name, check whether the candidate commit's message body contains that login or name. If found → human-reviewer-suggested with the reviewer's login: `human-reviewer-suggested (corne)`.
+- **Commit body / message references a human reviewer by login or full name.** Search `pr_metadata.reviews` and `pr_metadata.comments` for non-bot reviewers (any author whose login does NOT match a bot pattern). For each such reviewer's login + display name, check whether the candidate commit's message body contains that login or name. If found → human-reviewer-suggested with the reviewer's login: `human-reviewer-suggested (<reviewer-login>)`.
 - **Co-authored-by trailer points at a non-bot reviewer who left a review comment.** If `Co-authored-by:` matches a reviewer login → human-reviewer-suggested.
 - **Commit responds to a human review comment.** Find any review/comment from a non-bot user whose body contains at least one of `finding.evidence_tokens` AND whose timestamp precedes the candidate commit. If found → human-reviewer-suggested.
 
