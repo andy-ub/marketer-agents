@@ -90,13 +90,25 @@ A "Missed" score is not always a failure — if the missed element is engineerin
 
 ## 5. Aggregation + escalation
 
-A single PR is sampling-variance-bound. Aggregate over 3 PRs in the validation period, then apply the thresholds documented in [`development-workflow.md`](development-workflow.md) §"Empirical validation + escalation criteria":
+A single PR is sampling-variance-bound. Aggregate over 3 PRs in the validation period. **Two metrics tracked separately** (mirror of [`development-workflow.md`](development-workflow.md) §"Empirical validation + escalation criteria"):
 
-- **≥80% human-reviewer replication + 0 production bugs in panel dimension** → panel proven. Continue Step 5 only.
-- **50-80% replicated** → iterate persona prompts (false-positive trimming, severity rubric tightening, persona lane sharpening). Stay at Step 5.
-- **<50% replicated OR a production bug surfaces post-merge in a panel dimension** → escalate to Step 1 design panel (review the design before implementation, not just after).
+**Metric 1 — In-scope replication rate.** Of bugs that fall within panel's Q1-Q7 dimensions, what fraction does the panel catch? Measures panel quality.
 
-After each validation PR, fill the **Outcome tracking** section in that PR's `eval-runs/` archive (see PR #6 dry-run for the template).
+**Metric 2 — PR-scope coverage rate.** Of total bugs surfaced during PR lifecycle (regardless of dimension), what fraction falls within panel scope? Measures panel breadth — bounded by current persona lanes.
+
+### Escalation triggers (aggregate over 3 PRs)
+
+| In-scope replication | PR-scope coverage | Decision |
+|---|---|---|
+| ≥80% + 0 production bugs | n/a | Continue Step 5 only. Panel performing well within its scope. |
+| 50-80% | n/a | Iterate persona prompts (false positive trimming, severity rubric tightening, lane sharpening). |
+| <50% | n/a | **Escalate to Step 1 design panel** — panel missing in-scope bugs it should catch. |
+| Any | <50% sustained across 3+ PRs | **Consider adding new persona** for recurring out-of-scope class (Q4 decision-class persona, prompt-engineering persona, engineering-quality persona). Doesn't replace Step 5 — adds a fifth dimension. |
+| Any | Production bug surfaces in panel dimension | **Immediate escalate** — panel missed an in-scope catch, can't wait for 3-PR aggregate. |
+
+The two metrics are independent. A panel can hit 100% in-scope replication while covering only 50% of PR concerns — that's the PR #6 dry-run state. The first metric says "continue"; the second metric says "watch for recurring out-of-scope class."
+
+After each validation PR, fill the **Outcome tracking** AND **Complete bug ecology** sections in that PR's `eval-runs/` archive (see PR #6 dry-run for the template).
 
 ---
 
@@ -123,5 +135,7 @@ After each validation PR, fill the **Outcome tracking** section in that PR's `ev
 **3-PR sample size.** Three PRs is the minimum viable signal — it identifies catastrophic miss rates and obvious calibration problems, but not subtle drift, persona-lane coverage holes that emerge across diverse code surfaces, or false-positive distributions across tool types. Real validation needs 10+ PRs over multiple sprints to baseline these. Do not over-claim panel value after 3 PRs. Treat the 3-PR threshold as "minimum bar to keep using the panel," not "panel is proven."
 
 **Domain coverage gap.** The panel catches Q1-Q7 dimensions: Stone-vs-Opinion + filter policy + polarity + funnel attribution + hypothesis-echo + evidence tier + cross-tool handoff. Bugs outside this set — pure engineering correctness, performance, security, build configuration, test coverage — will not be caught. The panel is complementary to other review layers (pr-review-toolkit, Codex, human review per [`development-workflow.md`](development-workflow.md)), not a replacement. A PR where every bug is outside Q1-Q7 will produce a "No findings" panel — that is a correct result, not a panel failure.
+
+**Panel scope vs PR scope.** Panel catches Q1-Q7 domain-semantic dimensions. PR concerns extend beyond — LLM-prompt-engineering (description clarity, ambiguity handling, silent-substitute behaviors), product/vocabulary decisions (what values to support, near-miss handling), engineering refactors (DRY, naming consistency). PR #6 dry-run showed panel covers ~50% of total PR concerns (2 of 4 surfaced bugs in panel scope — B1 metric routing + B2 timezone caught; B3 LLM-prompt-engineering + B4 vocab expansion outside scope, caught by human review post-push). When measuring panel value, distinguish **in-scope replication rate** (what panel SHOULD hit ≥80%) from **PR-scope coverage rate** (what panel cannot exceed without persona expansion). Recurring out-of-scope concerns across multiple PRs is a signal to consider adding a new persona — see [`development-workflow.md`](development-workflow.md) §"Empirical validation + escalation criteria".
 
 **Reviewer signal vs panel signal.** Ground truth in these tests is "what the human reviewer caught" — but human reviewers also miss things. A panel finding flagged as "False Positive" because the human reviewer didn't surface it may actually be a genuine catch the reviewer missed. The honest fix is to surface ambiguous FPs to a second human reviewer before counting them as panel noise. Until that's done, the FP rate has an upward bias.

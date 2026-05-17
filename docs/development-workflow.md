@@ -66,22 +66,36 @@ The panel encodes the marketer-perspective-on-source-code pattern that human rev
 
 ## Empirical validation + escalation criteria
 
-The panel is in validation phase over the first 3 AI tool PRs. After each PR, fill the **Outcome tracking** section in that PR's `eval-runs/` archive.
+The panel is in validation phase over the first 3 AI tool PRs. After each PR, fill the **Outcome tracking** and **Complete bug ecology** sections in that PR's `eval-runs/` archive.
 
-Aggregate over 3 PRs:
+**Two metrics tracked separately:**
 
-- **≥80% of human-reviewer catches replicated by panel + 0 production bugs in panel dimensions** → panel proven. Continue Step 5 only.
-- **50-80% replicated** → iterate persona prompts. Tighten false-positive surfaces, sharpen lane boundaries, calibrate severity rubrics. Stay at Step 5.
-- **<50% replicated OR a production bug surfaces post-merge in a panel dimension** → escalate to Step 1 design panel. The panel reviews the design *before* implementation, not just after — adds ~30 min per PR (Step 1 + Step 5 dispatch).
+**Metric 1 — In-scope replication rate.** Of bugs that fall within panel's Q1-Q7 dimensions, what fraction does the panel catch? Measures panel **quality** within its lanes.
 
-The Step 1 escalation expands the panel's role from "catch bugs in implementation" to "catch design flaws before implementation locks them in." Only triggered if Step 5 alone proves insufficient.
+**Metric 2 — PR-scope coverage rate.** Of total bugs surfaced during PR lifecycle (regardless of dimension), what fraction falls within panel scope? Measures panel **breadth** — bounded by current persona lanes.
 
-Current state (1 of 3 PRs measured — PR #6 dry-run):
-- Replication rate: 100% (2 of 2 domain-semantic catches; engineering-refactor item correctly out-of-scope).
-- Production bugs in panel-dimension: n/a (dry-run on already-fixed PR).
-- False positive rate: ~6%.
+### Escalation triggers (aggregate over 3 PRs)
 
-On track to **"continue Step 5 only"** verdict pending 2 more PR runs.
+| In-scope replication | PR-scope coverage | Decision |
+|---|---|---|
+| ≥80% + 0 production bugs | n/a | Continue Step 5 only. Panel performing well within its scope. |
+| 50-80% | n/a | Iterate persona prompts (false positive trimming, severity rubric tightening, lane sharpening). |
+| <50% | n/a | **Escalate to Step 1 design panel** — panel missing in-scope bugs it should catch. Step 1 reviews the design *before* implementation, not just after; adds ~30 min per PR (Step 1 + Step 5 dispatch). |
+| Any | <50% sustained across 3+ PRs | **Consider adding new persona** for recurring out-of-scope class (e.g., Q4 decision-class persona, prompt-engineering persona, engineering-quality persona). Doesn't replace Step 5 panel — adds a fifth dimension. |
+| Any | Production bug surfaces in panel dimension | **Immediate escalate** — panel missed an in-scope catch, can't wait for 3-PR aggregate. |
+
+**The two metrics are independent.** A panel can hit 100% in-scope replication while covering only 50% of PR concerns — that's the PR #6 dry-run state. The first metric says "continue"; the second metric says "watch for recurring out-of-scope class."
+
+Step 1 expansion adds the panel's role to "catch design flaws before implementation locks them in," not replacing Step 5. The persona-expansion trigger is independent of Step 5 quality — adding a Q4 persona doesn't fix Step 5 catch rate, it widens what the panel reviews at all.
+
+### Current state (1 of 3 PRs measured — PR #6 dry-run)
+
+- **In-scope replication rate:** 100% (2 of 2 domain-semantic catches; engineering-refactor item correctly out-of-scope).
+- **PR-scope coverage rate:** 50% (2 of 4 total PR concerns; B3 LLM-prompt-engineering + B4 vocab-expansion out of panel scope, caught by human review post-push).
+- **Production bugs in panel-dimension:** n/a (dry-run on already-fixed PR).
+- **False positive rate:** ~6%.
+
+On track to **"continue Step 5 only"** verdict pending 2 more PR runs. Watch the PR-scope coverage signal — if 50% holds across 3 PRs with recurring LLM-prompt-engineering or vocab concerns, the persona-expansion trigger fires.
 
 ---
 

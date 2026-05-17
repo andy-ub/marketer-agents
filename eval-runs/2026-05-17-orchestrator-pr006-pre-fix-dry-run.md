@@ -61,7 +61,49 @@ First time the panel is applied to non-PR-#5 code with documented ground-truth c
 | GT-2a period vocabulary description tightening (reusable const + LLM clarification gate) | Engineering refactor | Not caught (out of panel scope — refactor, not domain-semantic) | **Different element** |
 | GT-2b timezone-aware boundaries | Concern → Block | Run 1: Concern (Data-Trust F9). Run 2: Block (Data-Trust F8). | **Full match × 2 runs** (with Run 2 severity drift) |
 
-**Aggregate replication rate of human-reviewer catches:** 2 of 2 domain-semantic catches replicated in both runs = **100%**. The third (GT-2a) is an engineering-refactor item that doesn't fit any panel persona's lane — correctly NOT flagged.
+**Aggregate replication rate of human-reviewer catches:** 2 of 2 domain-semantic catches replicated in both runs = **100% in-scope replication rate**. The third (GT-2a) is an engineering-refactor item that doesn't fit any panel persona's lane — correctly NOT flagged.
+
+---
+
+## Complete bug ecology — PR #6
+
+All bugs/concerns surfaced during PR lifecycle, regardless of who caught them. Updated 2026-05-17 to reflect the full picture (the Ground-truth comparison above only counted in-scope domain-semantic catches; this section adds out-of-scope concerns surfaced via other channels).
+
+| ID | Bug | Caught by | Stage caught | Severity | Class | Panel caught in dry-run? |
+|---|---|---|---|---|---|---|
+| B1 | Metric routing (sessions/users wrong fact tables) | Smoke test + Claude review | Pre-push Saturday | Block (runtime SQL error) | Domain-semantic | ✅ Multi-persona agreement |
+| B2 | Timezone-naive period boundaries | Claude review | Pre-push Saturday | Concern → fixed proactively | Domain-semantic (timezone fidelity) | ✅ Data-Trust persona |
+| B3 | Period vocab silent-substitute | Human review (post-push Friday DM) | Post-push Friday DM | Concern (LLM-prompt-engineering) | LLM behavior — out of panel scope | ❌ Not in Q1-Q7 |
+| B4 | "yesterday" vocab gap | Human review (post-push Friday DM) | Post-push Friday DM | Product decision pending | Vocabulary expansion — out of panel scope | ❌ Not in Q1-Q7 |
+| B5 | (no other bugs surfaced post-merge) | n/a | n/a | n/a | n/a | n/a |
+
+### Panel catch rate analysis (two metrics)
+
+- **Total bugs surfaced during PR lifecycle:** 4
+- **Bugs in panel scope (Q1-Q7 domain-semantic):** 2 (B1, B2)
+- **In-scope replication rate:** 2/2 = **100%** (what panel SHOULD hit ≥80%)
+- **PR-scope coverage rate:** 2/4 = **50%** (what panel cannot exceed without persona expansion)
+- **Bugs out of panel scope:** 2 (B3 LLM-prompt-engineering, B4 product/vocabulary decisions)
+
+### Implication
+
+Panel handles domain-semantic correctness well. Complements but does NOT replace human review on:
+
+- LLM-prompt-engineering concerns (clarity, ambiguity handling, silent-substitute behaviors).
+- Product / vocabulary decisions (what values to support, how to handle near-miss inputs).
+- Engineering quality refactors (DRY, reusable constants, naming consistency).
+
+### Out-of-scope class tracking
+
+For future PRs, track recurring out-of-scope classes in the bug ecology section. If a class recurs across ≥3 PRs as a post-push catch, it triggers the "consider adding new persona" decision per [`docs/development-workflow.md`](../docs/development-workflow.md) §"Empirical validation". Current tally after this run:
+
+| Out-of-scope class | Occurrences (across all PR archives) |
+|---|---|
+| LLM-prompt-engineering | 1 (B3 on PR #6) |
+| Product/vocabulary expansion | 1 (B4 on PR #6) |
+| Engineering-quality refactor | 1 (GT-2a `PeriodVocabulary` reusable const on PR #6) |
+
+This mechanism mirrors the Case C coverage-hole pattern alert in [`notes/orchestrator-design.md`](../notes/orchestrator-design.md) §3 — recurring out-of-scope concerns at the PR-ecology layer feed the same persona-design-layer signal as Case C escalations at the orchestrator layer.
 
 ---
 

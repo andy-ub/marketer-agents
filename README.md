@@ -130,7 +130,7 @@ Aggregate over 3 PRs for confidence. Escalation triggers documented in [`docs/de
 
 **Validation state (1 of 3 PRs measured):**
 
-- PR #6 (`engage_get_top_pages`) dry-run, 2026-05-17: panel replicated **2 of 2 domain-semantic catches** (metric routing + timezone-aware boundaries). Multi-persona agreement on metric routing (3 personas converged). One borderline false positive (~6% FP rate). Full archive at [`eval-runs/2026-05-17-orchestrator-pr006-pre-fix-dry-run.md`](eval-runs/2026-05-17-orchestrator-pr006-pre-fix-dry-run.md).
+- PR #6 (`engage_get_top_pages`) dry-run, 2026-05-17: panel replicated **2 of 2 domain-semantic catches** in panel scope (metric routing + timezone-aware boundaries). Multi-persona agreement on metric routing (3 personas converged). One borderline false positive (~6% FP rate). However, **panel scope covers approximately 50% of PR #6's total concerns** — 2 of 4 surfaced bugs fall outside panel's Q1-Q7 dimensions (LLM-prompt-engineering + vocabulary expansion). See [complete bug ecology in archive](eval-runs/2026-05-17-orchestrator-pr006-pre-fix-dry-run.md#complete-bug-ecology) for the full picture.
 - Story 25 (next): run #2 of 3 will land when the PR ships.
 
 **Honest limitations:**
