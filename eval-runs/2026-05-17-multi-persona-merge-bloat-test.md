@@ -131,3 +131,5 @@ This addresses Session 3's bloat concern (no 3 × full Reasoning stacking — ne
 **Apply Rule A to orchestrator before Story 25.** Current rule under-preserves audit signal on the panel's highest-confidence output shape (multi-persona-agreement Block). Rule A adds ~70 words per merged Block but keeps the framework-angle diversity that multi-persona agreement is supposed to surface.
 
 If Andy disagrees with the rule change and wants to keep the existing Recommendations-only fold for v0.5: that's defensible. Document the trade-off (current rule = simpler, drops non-lead Reasoning; Rule A = preserves diversity, 11% bloat). Don't apply Rule A silently — surface as a v0.5+ decision.
+
+**Decision (Andy, 2026-05-17): Apply Rule A.** Rule A active in orchestrator-prompt.md from this commit forward. Re-test against real (not synthetic) Reasoning bodies on the next multi-persona-agreement Block in real-PR runs (likely Story 25 if its catches converge).

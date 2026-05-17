@@ -214,9 +214,11 @@ For each merge group:
 | Configuration | Panel-level severity |
 |---|---|
 | 1 finding (singleton group) | unchanged |
-| any Block in group | Block; fold other findings' Recommendations into the Block finding via "Related concerns from {persona-ids}: …" |
+| any Block in group | Block; **fold non-lead Reasonings into "Related reasoning from {persona-id} ({framework-citation}): {compressed-reasoning}" lines** AND fold other findings' Recommendations into "Related concerns from {persona-id}: {recommendation}" lines on the Block finding; emit `compound-severity: Block + Concern from {persona-X, persona-Y}` flag |
 | ≥2 distinct-persona Concerns, no Block | **Panel-level Block** (elevation); preserve per-finding Concern severity; tag `compound-severity: 2× Concern elevated to Block` |
 | All Nits, or single-persona-multiple-findings | unchanged |
+
+**Compressed-reasoning rule (Rule A from multi-persona merge bloat test):** When folding non-lead Reasonings, keep the framework citation + alternative-considered + severity-boundary sentences. Drop the framework-trigger sentence if it restates what the lead's Reasoning already established. Target compression: ~30-40 words per non-lead Reasoning (from typical ~90-100 word full Reasoning). The LLM in-session does the compression as part of rendering Step 7; the underlying finding's full Reasoning is preserved in the raw artifact at `eval-runs/raw/` for future independent audit.
 
 Annotate each finding with:
 - `panel_severity` — post-elevation
@@ -353,10 +355,14 @@ Emit the panel review using this exact structure (Risk 1c). Replace placeholders
 - **Multi-persona agreement:** <count> personas flagged related Evidence ({<persona-ids>})
 - **Origin:** <implementer-authored | ai-reviewer-suggested | human-reviewer-suggested | unknown[ — <reason>]>
 - **Evidence:** <verbatim from persona>
-- **Framework citation:** <verbatim from persona>
-- **Reasoning:** <verbatim from persona>
-- **Issue:** <verbatim from persona>
-- **Recommendation:** <verbatim from persona>
+- **Framework citation:** <verbatim from lead persona>
+- **Reasoning:** <verbatim from lead persona>
+  <if multi-persona-agreement and Rule A applies:>
+  *Related reasoning from <other-persona> (<other-persona's framework citation>):* <compressed Reasoning, 30-40 words per Rule A>
+  <repeat for each non-lead persona in the merge group>
+  <end if>
+- **Issue:** <verbatim from lead persona>
+- **Recommendation:** <verbatim from lead persona>
   <if related-concerns folded in:>
   *Related concerns from <other-persona>:* <other-persona's Recommendation>
   <end if>
