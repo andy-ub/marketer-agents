@@ -145,7 +145,7 @@ See [`docs/testing-the-panel.md`](docs/testing-the-panel.md) for full methodolog
 
 ## License
 
-[MIT](LICENSE). © 2026 Andy Vu Viet.
+[MIT](LICENSE). Original work by Andy Vu Viet, 2026 — derived in part from patterns surveyed in the projects credited under [Acknowledgments](#acknowledgments). Patterns and concepts referenced are not themselves copyrightable; specific implementations in the surveyed repos remain with their respective owners under their own licenses.
 
 ---
 
