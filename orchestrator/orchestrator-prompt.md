@@ -41,7 +41,7 @@ gh pr view <NUMBER> --repo <owner/repo> --json title,body,headRefName,baseRefNam
 
 The JSON output is the input to origin-stamping (Step 5). Cache it in-session — do not refetch.
 
-For the review history specifically: `gh pr view ... --json reviews,comments` gives reviewer comments. To find AI-reviewer suggestions (Codex, pr-review-toolkit), filter the comments/reviews where `author.login` matches a known bot pattern (`codex-bot`, `coderabbitai`, `claude-bot`, etc.) — initial bot list to maintain in `state/known-ai-reviewers.md` (Phase 2.5; for v1, treat any user with `[bot]` suffix or matching `*codex*` / `*claude*` / `*reviewer*` as `ai-reviewer-suggested`).
+For the review history specifically: `gh pr view ... --json reviews,comments` gives reviewer comments. To find AI-reviewer suggestions (Codex and similar), filter the comments/reviews where `author.login` matches a known bot pattern (`codex-bot`, `coderabbitai`, `claude-bot`, etc.) — initial bot list to maintain in `state/known-ai-reviewers.md` (Phase 2.5; for v1, treat any user with `[bot]` suffix or matching `*codex*` / `*claude*` / `*reviewer*` as `ai-reviewer-suggested`).
 
 ### Local / pasted forms
 
@@ -246,7 +246,7 @@ Iterate over each finding. For each:
    - Diff that commit (`gh api repos/<owner>/<repo>/commits/<sha> --jq '.files'`).
    - If any modified line in the commit contains a token from `evidence_tokens` → record commit as a candidate origin.
 3. Classify the finding's origin by inspecting candidate commits and PR review history:
-   - **`ai-reviewer-suggested`** — at least one candidate commit references (in body, title, or co-author) a known AI-reviewer bot identifier (`codex`, `claude`, `coderabbitai`, `pr-review-toolkit`, or any user with `[bot]` suffix). OR the change was made in response to a review comment from a bot user.
+   - **`ai-reviewer-suggested`** — at least one candidate commit references (in body, title, or co-author) a known AI-reviewer bot identifier (`codex`, `claude`, `coderabbitai`, `copilot`, or any user with `[bot]` suffix). OR the change was made in response to a review comment from a bot user.
    - **`human-reviewer-suggested`** — at least one candidate commit references (in body, title, or `Co-authored-by:` trailer) a non-bot reviewer who submitted a PR review comment touching the same Evidence tokens. Most common: PM/lead inline comments.
    - **`implementer-authored`** — candidate commits exist, but no AI-reviewer or human-reviewer linkage found; change was introduced by the PR author in their initial push.
    - **`unknown`** — no candidate commits found (Evidence tokens don't match any modified line in the PR), OR gh CLI returned errors mid-stamping (see failure path below).

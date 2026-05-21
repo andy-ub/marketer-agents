@@ -14,7 +14,7 @@ This subsystem assigns each panel finding an `origin` tag indicating who introdu
 | Class | Meaning |
 |---|---|
 | `implementer-authored` | The PR author introduced this change in their initial push. No reviewer suggestion preceded it. |
-| `ai-reviewer-suggested` | An AI code reviewer (Codex, pr-review-toolkit, claude-bot, coderabbitai, etc.) suggested the change in a PR review comment; the PR author then accepted/applied it. |
+| `ai-reviewer-suggested` | An AI code reviewer (Codex, claude-bot, coderabbitai, copilot, etc.) suggested the change in a PR review comment; the PR author then accepted/applied it. |
 | `human-reviewer-suggested` | A human reviewer (PM, lead, peer) suggested the change in a PR review comment; the PR author then accepted/applied it. |
 | `unknown` | Origin could not be determined — either Evidence tokens didn't match any modified line in the PR, OR origin-stamping failed mid-run (gh CLI errors, rate limit, auth failure). The reason is appended to the class string: `unknown — origin-stamping failed (auth)`. |
 
@@ -53,7 +53,7 @@ If no candidate commits: **origin = `unknown`** (Evidence tokens don't match any
 
 For each candidate commit, check whether the commit was made *in response to* an AI-reviewer suggestion. Heuristics, evaluated as OR (any match → AI-reviewer-suggested):
 
-- **Commit body / message references an AI reviewer.** Search the commit's full message body for case-insensitive matches of: `codex`, `coderabbit`, `pr-review-toolkit`, `claude-bot`, `copilot-bot`, `[bot]`. If found → AI-reviewer-suggested. Surface the matched bot name in the origin tag: `ai-reviewer-suggested (codex)`.
+- **Commit body / message references an AI reviewer.** Search the commit's full message body for case-insensitive matches of: `codex`, `coderabbit`, `claude-bot`, `copilot-bot`, `[bot]`. If found → AI-reviewer-suggested. Surface the matched bot name in the origin tag: `ai-reviewer-suggested (codex)`.
 - **Co-authored-by trailer points at a bot.** Search for `Co-authored-by: ...<...[bot]@...>` or `Co-authored-by: ...codex...` patterns. If found → AI-reviewer-suggested.
 - **Commit replies to a bot review comment.** Cross-reference `pr_metadata.comments` and `pr_metadata.reviews`: find any comment/review where `author.login` matches a bot pattern (suffix `[bot]`, or login containing `codex`, `claude`, `coderabbit`, `copilot`) AND whose body text contains at least one of the finding's `evidence_tokens`. If such a comment exists AND its timestamp precedes the candidate commit's timestamp → AI-reviewer-suggested.
 
@@ -128,7 +128,7 @@ In-session memoization is sufficient for v1. Persistent cache (across runs) is P
 
 ## Known limitations (Phase 2.5 backlog)
 
-1. **Bot identifier list is hardcoded.** `codex`, `coderabbit`, `pr-review-toolkit`, `claude-bot`, `copilot-bot`, `[bot]` suffix. New AI reviewers (or rebranded ones) won't be detected until the list is updated. Mitigation: maintain `state/known-ai-reviewers.md` once smoke-test data shows real-world distribution.
+1. **Bot identifier list is hardcoded.** `codex`, `coderabbit`, `claude-bot`, `copilot-bot`, `[bot]` suffix. New AI reviewers (or rebranded ones) won't be detected until the list is updated. Mitigation: maintain `state/known-ai-reviewers.md` once smoke-test data shows real-world distribution.
 2. **Token overlap is heuristic, not semantic.** Two unrelated commits that happen to mention the same token will both flag as candidates. Manual audit in first 3 runs (per smoke-test attention point #3 in orchestrator-prompt.md) is the verification path.
 3. **Timestamp ordering relies on author timestamps.** If a reviewer leaves a suggestion and the PR author rebases/cherry-picks, timestamps may shift. Mitigation: also check `committed_date` and prefer the later of the two.
 4. **No support for inline suggestion comments with the `suggestion` markdown block** (`gh`'s GitHub-specific "Apply suggestion" feature). These produce explicit commits but the comment body may not contain the changed code's tokens — the suggestion block contains them in a separate field. Phase 2.5 enhancement: parse `suggestions` arrays in comment payloads if `gh pr view --json reviews` exposes them.

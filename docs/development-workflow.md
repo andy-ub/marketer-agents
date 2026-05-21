@@ -11,7 +11,7 @@ The panel is a single pre-push review step for AI tool PRs. Runs once per PR at 
 ```
 1. Planning           — apply v1.1 domain audit (existing memory rule)
 2. Implementation     — code + unit tests pass
-3. pr-review-toolkit  — 3 agents (existing): code-reviewer / silent-failure-hunter / type-design-analyzer
+3. AI code-review agents — engineering correctness / silent-failure / type-design layers (existing)
 4. Codex review       — style, edge cases, redundancy (existing per memory rule)
 5. Panel self-review  — invoke orchestrator (NEW — this repo)
 6. UI verification    — Playwright + Copilot (existing, when tool surfaces have UI)
@@ -55,7 +55,7 @@ When dispatching against new tool surfaces, **include source-of-truth schema con
 
 | Layer | Tool | What it catches |
 |---|---|---|
-| Engineering tier | pr-review-toolkit (3 agents) | Code quality, error handling, type design |
+| Engineering tier | AI code-review agents (3 agents typical: code-reviewer / silent-failure / type-design) | Code quality, error handling, type design |
 | Style / edge tier | Codex | Style consistency, edge cases, redundancy |
 | **Domain tier (this panel)** | **Marketer panel (4 personas)** | **Domain-semantic bugs at the tool surface — what the wire format will make a marketer believe** |
 | Final gate | Human reviewer (PM / lead) | Business intent, domain expertise, downstream impact |

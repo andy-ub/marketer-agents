@@ -6,7 +6,7 @@ last-updated: 2026-05-17
 
 # Marketer Agent Panel — Handoff
 
-Built over the weekend (2026-05-16 → 2026-05-17). Goal: catch domain-semantic bugs in Engage.AI PRs that general-purpose LLM reviewers (Codex, pr-review-toolkit) miss or actively introduce — the failure class that surfaced in PR #5.
+Built over the weekend (2026-05-16 → 2026-05-17). Goal: catch domain-semantic bugs in Engage.AI PRs that general-purpose LLM reviewers (Codex and similar AI code reviewers) miss or actively introduce — the failure class that surfaced in PR #5.
 
 This document is your runbook for Monday morning.
 
@@ -204,7 +204,7 @@ All Phase 2.5 items addressed in the weekend build. Status:
 - **Q4 decision-class framing** — no persona owns it; if it recurs in Case C escalations, add a Q4 persona.
 - **Q5 evidence-tier overclaims** — Data-Trust embeds the framework but no eval exists yet; activates when AttributionType lands.
 - **General code quality** — naming conventions outside semantic imposition, dead code, performance issues, security. The panel is domain-semantic, not general-purpose code review. Use `/code-review` or similar for that.
-- **Test coverage / test discipline** — out of scope. Use `pr-review-toolkit:pr-test-analyzer` for that.
+- **Test coverage / test discipline** — out of scope. Use a dedicated test-coverage review tool for that.
 
 The panel is a complement to general code review, not a replacement. Run both.
 

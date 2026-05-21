@@ -7,7 +7,7 @@ source-pr: umbraco/umbraco.engage.ai PR #5 (Story 03 — engage_get_goals)
 source-fix: commit d483e05 (reverted MonetaryValue → Value)
 created: 2026-05-15
 purpose: Mechanical eval input for marketer-review skill / agent panel. Tests the AI-suggested-semantic-imposition failure mode — where an AI reviewer (Codex in this case) renames a generic field to a specific semantic that the data does not guarantee.
-notable: This is the failure mode where AI reviewers (Codex / pr-review-toolkit) actively introduced the bug. Stone-vs-Opinion is the precise OSS discipline that prevents it.
+notable: This is the failure mode where AI reviewers (Codex and similar) actively introduced the bug. Stone-vs-Opinion is the precise OSS discipline that prevents it.
 ---
 
 # Eval case: MonetaryValue rename — Opinion-class field promoted to Stone-class
@@ -94,7 +94,7 @@ The wasted action: marketer makes a business decision based on a fabricated doll
 **Q1 extension — Stone vs Opinion semantic class per field.**
 
 - `Goal.Value` is **Opinion-class** (marketer-asserted intent).
-- AI reviewers (Codex, pr-review-toolkit) must NOT silently promote it to Stone-class semantic via rename.
+- AI reviewers (Codex and similar) must NOT silently promote it to Stone-class semantic via rename.
 - Field-level enum `SemanticClass: Stone | Opinion` on the record is the structural fix.
 
 ## Expected reviewer output
@@ -173,7 +173,7 @@ If the persona produces all three, persona-level PASS is achieved. The persona i
 4. Persona-level PASS achieved, AND
 5. Orchestrator stamps `origin: ai-reviewer-suggested` on the relevant finding by matching its Evidence string against PR review history (Codex round-1 suggestion in this case). The origin tag is a deterministic match against PR data, not a reasoning step.
 
-**Why the split:** A persona reviewing only a code diff has no reliable signal for "this was AI-reviewer-introduced." That signal lives in commit messages, PR comments, and Codex/pr-review-toolkit suggestion records — outside the diff. Asking the persona to infer origin from stylistic heuristics ("overly verbose naming," "for LLM clarity" rationale shapes) contaminates framework-grounded findings with speculation. The orchestrator owns the deterministic match.
+**Why the split:** A persona reviewing only a code diff has no reliable signal for "this was AI-reviewer-introduced." That signal lives in commit messages, PR comments, and Codex / AI-reviewer suggestion records — outside the diff. Asking the persona to infer origin from stylistic heuristics ("overly verbose naming," "for LLM clarity" rationale shapes) contaminates framework-grounded findings with speculation. The orchestrator owns the deterministic match.
 
 **FAIL conditions unchanged:** as listed above. They apply at persona-level (the persona's three responsibilities).
 

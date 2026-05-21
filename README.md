@@ -6,7 +6,7 @@ Multi-persona AI panel for reviewing code from a marketer's perspective. Four sp
 
 ## Why this exists
 
-General-purpose LLM code review (Codex, pr-review-toolkit, etc.) is good at idiomatic correctness but blind to **what the code will make a marketer believe**. The canonical failure: in Umbraco Engage.AI PR #5, an AI reviewer suggested renaming `Goal.Value` (a generic configurable decimal) to `MonetaryValue` "for LLM clarity." The implementer accepted the suggestion. The rename was a semantic lie — marketers configure `Goal.Value` as money for some goals, scores for others, weights for others, zero-for-tracking for others. With the field renamed `MonetaryValue`, an LLM reading the response would total the goals and confidently report "$X in pipeline" when the column is a mix of dollars and scores. The marketer commits budget against fabricated currency arithmetic.
+General-purpose LLM code review (Codex and similar AI code reviewers) is good at idiomatic correctness but blind to **what the code will make a marketer believe**. The canonical failure: in Umbraco Engage.AI PR #5, an AI reviewer suggested renaming `Goal.Value` (a generic configurable decimal) to `MonetaryValue` "for LLM clarity." The implementer accepted the suggestion. The rename was a semantic lie — marketers configure `Goal.Value` as money for some goals, scores for others, weights for others, zero-for-tracking for others. With the field renamed `MonetaryValue`, an LLM reading the response would total the goals and confidently report "$X in pipeline" when the column is a mix of dollars and scores. The marketer commits budget against fabricated currency arithmetic.
 
 That bug shipped past automated review. It was caught at human PR review and reverted in commit `d483e05`. The pattern — **AI reviewer introduces a domain-semantic bug, automated review misses it, the marketer pays the cost** — is the failure class this panel is calibrated against.
 
@@ -152,6 +152,44 @@ See [`docs/testing-the-panel.md`](docs/testing-the-panel.md) for full methodolog
 ## Contributing
 
 PRs welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the persona structural template and validation-gate requirements. Short version: **new personas need a passing eval case before merge**.
+
+---
+
+## Acknowledgments
+
+The panel's structural design and audit framework were shaped by these projects:
+
+**Multi-agent pattern inspiration:**
+
+- [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) — party-mode collaboration pattern. This panel adapts the idea (multiple personas reviewing the same artifact in parallel) without depending on the BMAD framework itself; personas here are standalone Claude Code system prompts orchestrated via the `Agent` tool.
+
+**Domain framework (Q1-Q7 audit dimensions) — derived from a survey of 9 OSS marketer-agent codebases:**
+
+Tier 1 (deep code reading):
+
+- [Motion-Creative/bootcamp](https://github.com/Motion-Creative/bootcamp) — marketing analytics + funnel diagnosis vocabulary
+- [rusanovproject-dotcom/marketer-agent-pack](https://github.com/rusanovproject-dotcom/marketer-agent-pack) — Claude Code-native marketer workflow; inline hypothesis-tagging pattern (Q7 lineage)
+- [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) — specialist reviewer personas; auditor checkpoint structure
+- [OpenAnalystInc/Vibe-Marketer](https://github.com/OpenAnalystInc/Vibe-Marketer) — hallucination-detection framework; Financial Risk Tiers (severity-elevation lineage)
+- [Eronred/aso-skills](https://github.com/Eronred/aso-skills) — router-as-skill pattern; field-constraint semantics
+- [indranilbanerjee/digital-marketing-pro](https://github.com/indranilbanerjee/digital-marketing-pro) — **Stone-vs-Opinion canonical source** (Q1(c) framework name and structure); Two-Views Model; Multi-Dimensional Decision Framework
+- [realjaymes/marketingagentskills](https://github.com/realjaymes/marketingagentskills) — ICEEE experimentation framework; halt-permission pattern (Q7 hypothesis-echo lineage)
+
+Tier 2 (README + targeted fetch):
+
+- [HumanAlone/digital-marketer-agent](https://github.com/HumanAlone/digital-marketer-agent) — 4-part diagnostic response shape; Pydantic field-constraint patterns
+- [rogersba1/AgentMarketerPOC](https://github.com/rogersba1/AgentMarketerPOC) — plan-then-execute pattern; typed human-in-loop approval state machine
+
+The 7-question audit framework (`feedback_domain_field_audit.md` v1.1, embedded in each persona file) emerged from the synthesis pass across these 9 sources. Specific pattern citations are anonymized as P2-P9 inside the panel's design-patterns catalog for brevity.
+
+**Calibration codebases:**
+
+- [umbraco/umbraco.engage.ai](https://github.com/umbraco/umbraco.engage.ai) — the AI tool codebase the panel is calibrated against. Eval cases (PR #5 MonetaryValue / IsInverted / IsInvalid; PR #6 `engage_get_top_pages`) all derive from this repo's commit history.
+- Umbraco Engage Core — analytics data layer (`IGoal`, `IGoalService`, `IReportingConfiguration`, fact tables) that AI tools surface; provides source-of-truth context for dispatch.
+
+**Platform:**
+
+- [Claude Code](https://claude.com/claude-code) and the Claude Agent SDK (Anthropic) — the orchestrator runs in a Claude Code session and dispatches personas via the `Agent` tool. Panel architecture (markdown spec + parallel subagent dispatch) is shaped by what this platform makes cheap.
 
 ---
 
